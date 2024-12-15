@@ -3,6 +3,8 @@ package mk.finki.ukim.mk.lab.bootstrap;
 import jakarta.annotation.PostConstruct;
 import mk.finki.ukim.mk.lab.model.Event;
 import mk.finki.ukim.mk.lab.model.Location;
+import mk.finki.ukim.mk.lab.repository.EventRepository;
+import mk.finki.ukim.mk.lab.repository.LocationRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +16,13 @@ public class DataHolder {
 	public static List<Location> locations = null;
 	public static List<Event> events = null;
 
+	private final EventRepository eventRepository;
+	private final LocationRepository locationRepository;
+
+	public DataHolder(EventRepository eventRepository, LocationRepository locationRepository) {
+		this.eventRepository = eventRepository;
+		this.locationRepository = locationRepository;
+	}
 	@PostConstruct
 	public void init(){
 		locations = new ArrayList<>();
@@ -22,6 +31,7 @@ public class DataHolder {
 		locations.add(new Location((long)3,"Veles","loc stree 125","300", "third location"));
 		locations.add(new Location((long)4,"Ohrid","loc stree 126","400", "fourth location"));
 		locations.add(new Location((long)5,"Strumica","loc stree 127","500", "fifth location"));
+		locationRepository.saveAll(locations);
 
 		this.events = new ArrayList<>();
 		this.events.add(new Event("Event 1","decription 1", 1.0,locations.get(0)));
@@ -34,5 +44,6 @@ public class DataHolder {
 		this.events.add(new Event("Event 8","decription 8", 8.0,locations.get(3)));
 		this.events.add(new Event("Event 9","decription 9", 9.0,locations.get(4)));
 		this.events.add(new Event("Event 10","decription 10", 10.0,locations.get(4)));
+		this.eventRepository.saveAll(events);
 	}
 }
